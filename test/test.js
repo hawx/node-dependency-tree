@@ -503,6 +503,10 @@ describe('dependencyTree', function() {
     describe('typescript', function() {
       testTreesForFormat('ts', '.ts');
     });
+
+    describe.only('typescript with tsconfig', function() {
+      testTreesForFormat('tsconfig', '.ts');
+    });
   });
 
   describe('toList', function() {

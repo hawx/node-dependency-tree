@@ -72,6 +72,25 @@ module.exports.toList = function(options) {
 };
 
 /**
+ * Returns a list of dependencies with '~' replaced by the path from the file to the root.
+ *
+ * This is a hack.
+ *
+ * @param  {String} rootDirectory
+ * @param  {Array} dependencies
+ * @return {Array}
+ */
+function _relativise(rootDirectory, dependencies) {
+  return dependencies.map(dep => {
+    if (dep[0] === '~') {
+      return rootDirectory + dep.slice(1);
+    }
+
+    return dep;
+  });
+}
+
+/**
  * Returns the list of dependencies for the given filename
  *
  * Protected for testing
@@ -85,7 +104,7 @@ module.exports._getDependencies = function(config) {
   precinctOptions.includeCore = false;
 
   try {
-    dependencies = precinct.paperwork(config.filename, precinctOptions);
+    dependencies = _relativise(config.directory, precinct.paperwork(config.filename, precinctOptions));
 
     debug('extracted ' + dependencies.length + ' dependencies: ', dependencies);
 
